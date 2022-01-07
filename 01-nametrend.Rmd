@@ -1,0 +1,44 @@
+---
+title: "Baby Name Trends"
+output: github_document
+params: 
+  name: "Aimee"
+  from: 1900
+  to: 1950 
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, size = "small", collapse=TRUE, comment=NA, warning = FALSE, message = FALSE)
+```
+
+
+```{r}
+#install.packages("babynames")
+library(babynames)
+```
+
+```{r}
+knitr::kable(head(babynames), format = "html")
+```
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+filtered_names <- babynames %>% filter(name==params$name, year < params$to, year > params$from)
+knitr::kable(head(filtered_names), format = "html")
+```
+
+
+```{r}
+#install.packages("ggplot2")
+library(ggplot2)
+```
+
+
+```{r trend, fig.cap= "A trend chart", tidy=FALSE}
+ggplot(data=filtered_names, aes(x=year, y=prop)) + 
+  geom_line(aes(colour=sex)) + 
+  xlab('Year') + 
+  ylab('Prop. of Babies Named Aimee')
+```
+
