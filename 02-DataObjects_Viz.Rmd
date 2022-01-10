@@ -1,0 +1,130 @@
+---
+title: "Data Objects and Basic Visualization Activity"
+output: github_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, size = "small", collapse=TRUE, comment=NA, warning = FALSE, message = FALSE)
+```
+
+
+```{r}
+babynames <- read.csv("https://raw.githubusercontent.com/deepbas/statdatasets/main/baby-names-by-state.csv")
+x <- c(3,6,9,5,10)
+x.mat <- cbind(x, 2*x)
+x.df <- data.frame(x=x,double.x=x*2)
+my.list <- list(myVec=x, myDf=x.df, myString=c("hi","bye"))
+```
+
+### Question 1: data types
+
+- What data type is `x`? What data type is `babynames$number`? 
+
+```{r}
+# Your code
+
+```
+
+- What data type is `c(x, babynames$year)`?
+
+```{r}
+# Your code
+
+```
+
+- What data type is `c(x,NA)`?  What data type is `c(x,"NA")`?
+
+### Question 2: Subsetting and coercion
+
+- How can we reverse the order of entries in `x`?
+
+```{r}
+# Your code
+
+```
+
+- What does `which(x < 5)` equal?
+- What does `sum(c(TRUE,FALSE,FALSE,FALSE, FALSE))` equal?
+- What does `sum(x[c(TRUE,FALSE,FALSE,FALSE, FALSE)])` equal?
+- What does `sum(x < 5)` equal?
+- What does `sum(x[x < 5])` equal?
+- Why `dim(x.mat[1:2,1])` return `NULL` while `dim(x.mat[1:2,1:2])` returns a dimension?
+
+### Question 3: Lists
+
+- Using `my.list`, show three ways to write one command that gives the 3rd entry of variable `x` in data frame `myDf`
+- What class of object does the command `my.list[3]` return?
+- What class of object does the command `my.list[[3]]` return?
+- What class of object does the command `unlist(my.list)` return? Why are all the entries `character`s?
+
+### Question 4: Data Frames
+
+Loading the `tidyverse` loads 8 packages, one of which is `ggplot2`. You can certainly load each package individually, but it has become common to simply load the `tidyverse`.
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+babynames_MN_Amy <- babynames %>% filter(state=="MN",  name == "Amy")
+```
+
+- What is the total number of babies born in Minnesota with name `John`?
+
+```{r}
+# Your code
+
+```
+
+
+- In what year were highest number of babies were named Alex in Minnesota?
+
+```{r}
+# Your code
+
+```
+
+
+### Question 5: Basic Plot using `ggplot2`.
+
+```{r}
+#install.packages("ggplot2")
+library(ggplot2)
+```
+
+- What are the grammar of graphics needed to create a scatter-plot of the number of babies born in Minnesota named `John` vs year they were born.
+
+- **data**: 
+- **aesthetic mapping**: `y = \ldots   `, `x =  \ldots`
+- **geometric object**: 
+
+- Fill in the data and aesthetic mapping in the below code chunk. What is returned? What's missing?
+
+```{r, eval = FALSE}
+# Fill in the blanks
+ggplot(data =  , mapping = aes(x = , y = number ))
+```
+
+- Add the appropriate geometric object to create the scatter plot. This is called adding a *layer* to a plot. Remember to always put the `+` at the end of a line, never at the start.
+
+
+```{r, eval=FALSE}
+ggplot(data =  , mapping = aes(x = , y = number )) +
+  geom_point()
+
+```
+
+- Repeat the above steps with babies named `John` from Minnesota or Michigan.
+
+```{r, eval=FALSE}
+babynames_MN_MI_John <- babynames %>% filter(state=="MN" | state == "MI",  name == "John")
+ggplot(data =  , mapping = aes(x = , y = number )) +
+  geom_point()
+```
+
+- Finally, add appropriate labels
+
+```{r fig.cap= "A trend chart", tidy=FALSE, eval=FALSE}
+ggplot(data = babynames_MN_MI_John , mapping = aes(x = year, y = number)) +
+  geom_point(aes(colour=state))+
+  xlab() +
+  ylab()
+```
