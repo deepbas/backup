@@ -1,0 +1,216 @@
+---
+title: "More visualizations with ggplot2"
+author: "Bastola"
+date: "1/12/2022"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE,eval=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      collapse = TRUE, 
+                      comment=NA, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.height = 4, fig.width = 6, fig.align='center')
+
+
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(tidyverse)
+library(dslabs)
+library(datasauRus)
+```
+
+## Your Turn 1
+
+The data frame in this exercise is called datasaurus_dozen and it's in the datasauRus package. This single data frame contains 13 datasets.
+
+```{r, echo=FALSE}
+# Use single dataset called 'dino'
+dino_data <- datasaurus_dozen %>%
+   filter(dataset == "dino")
+```
+
+a. Generate a scatter plot of the variables y and x in the dataset `dino_data` using `aes()` mapping function.
+
+```{r}
+ggplot(data = ____, mapping = aes(x = __, y = __)) +
+  geom_point()
+```
+
+b. You _must_ remember to put the aesthetic mappings in the `aes()` function! What happens if you forget? 
+
+```{r}
+# Add a layer and see what happens
+ggplot(data = ___ , x = ___ , y = __)
+```
+
+*Answer:*
+
+
+
+c. The aesthetic mappings can be specified in the geom layer if you prefer, instead of the main `ggplot()` call. Give it a try:
+
+```{r}
+# Rebuild the scatterplot with your aesthetic mapping in the geom layer
+ggplot(data = dino_data) +
+   geom_point(aes(x = __, y = __)) 
+```
+
+
+\vspace*{1in}
+
+
+# Your turn 2
+
+Work with the same dataset `datasaurus_dozen` from the `datasauRus` package. This single data frame contains 13 datasets.
+
+a. Let's `filter` 4 datasets called `dino`, `star`, `x_shape`, and `away`. Make a multipanel scatter plot usinf these 4 datasets.
+
+
+```{r, echo=FALSE}
+library(datasauRus)
+dino_data_four <- datasaurus_dozen %>%
+   filter(dataset == "dino" | dataset == "star" | dataset == "x_shape"| dataset == "away")
+```
+
+
+```{r}
+ggplot(dino_data_four, aes(x = x, y = y, color = ______)) +
+  geom_point() +
+  facet_wrap(~ ______, ncol = 2) +
+  theme(legend.position = "none")
+```
+
+
+b. Could you make a multi-panel plot including all 13 datasets. What is your favorite shape?
+
+```{r}
+ggplot(___________, aes(x = x, y = y, color = dataset)) +
+  geom_point() +
+  facet_wrap(~ dataset, ncol = 4) +
+  theme(legend.position = "none")
+
+```
+
+\vspace*{1in}
+
+
+## Your Turn 3
+
+- The `mpg` data set is loaded with the `tidyverse`. Run `?mpg` for more info. 
+
+a. Create this bar chart of vehicle `class`.
+
+```{r echo=FALSE, fig.height = 4, fig.wigth = 7, fig.align='center'}
+ggplot(data = mpg) +
+  geom_bar(mapping = aes(x = ______, fill = ______))
+```
+
+
+\vspace*{1in}
+
+# Your Turn 4
+
+The 2018 Gapminder data set contains information on income (GDP adjusted for difference in purchasing power), life expectancy (the average number of years a newborn is expected to live if mortality patterns remain constant), and population for 193 countries in 2018. 
+
+```{r}
+gap_dat <-read.csv("https://raw.githubusercontent.com/deepbas/statdatasets/main/gapminder2018.csv")
+gapminder <- gap_dat %>% filter(year == 2018)
+glimpse(gapminder)
+```
+
+a. Build the histogram of `life expectancy` using `geom_histogram()`. Don't hesitate to look at the ggplot2 cheat sheet for help!
+
+```{r}
+# Fill in the blanks
+ggplot(gapminder, mapping = aes(__________)) +
+    geom_histogram()
+```
+
+
+b. What have you learned about the distribution of life expectancy in 2018?
+
+*Answer:* 
+
+
+c. To change the number of bins, to say 50, add the *argument* `bins = 50` to `geom_histogram()`. Note: this is **not** an aesthetic mapping.
+
+```{r}
+# Fill in the blanks
+ggplot(gapminder, mapping = aes(life_expectancy)) +
+    geom_histogram(_____)
+```
+
+d. Instead of a histogram, let's create a kernel density plot. To do this, substitute `geom_density()` into your code for question
+4c.
+
+```{r}
+ggplot(gapminder, mapping = aes(life_expectancy)) +
+  ____________
+```
+
+
+Next, let's make _boxplots_ of the population for each region (based on the `four_regions` column).
+
+d. Use `geom_boxplot()` to create _box plots_ of the population for each region. What do you learn?
+
+```{r}
+# Fill in the blanks
+ggplot(gapminder, mapping = aes(x = four_regions, y = population))
++ _________
+```
+
+
+*Answer:* 
+
+
+e. The boxplots in question (d) are hard to read due to the _scale_ of the y-axis. Add the layer `scale_y_log10()` to apply a logarithmic transformation to the y-axis. What do you learn?
+
+```{r}
+ggplot(gapminder, mapping = aes(x = four_regions, y = population)) +
+  geom_boxplot() +
+  ____________
+```
+
+*Answer:*
+
+f. A violin plot is a kernel density on its side, made symmetric. Change your code from question 4e to use `geom_violin()`. Which plot do you prefer, boxplots or violin plots? Why?
+
+```{r}
+ggplot(gapminder, mapping = aes(x = four_regions, y = population)) +
+  _____________ +
+  scale_y_log10()
+```
+
+How many countries are in each region? Let's use graphics to find out!
+
+
+g. Make a bar chart of the number of countries in each continent using `geom_bar()`. 
+
+```{r}
+# Fill in the blanks
+ggplot(gapminder, mapping = aes(x = four_regions)) +
+  geom_bar()
+```
+
+
+*Answer:* 
+
+
+h. Notice the y-axis. Oddly, `ggplot2` doesn't make it obvious how to change to proportion. Try adding a `y` aesthetic: `y = ..count../sum(..count..)`.
+
+```{r}
+ggplot(gapminder, mapping = aes(x = four_regions, y = ..count../sum(..count..))) +
+  geom_bar()
+```
+
+
+
+
+
+
